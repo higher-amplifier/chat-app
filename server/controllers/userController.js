@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import cloudinary from "../lib/cloudinary.js";
 import { generateToken } from "../lib/utils.js";
 
+// ================= SIGNUP =================
 export const signup = async (req, res) => {
   const { fullName, email, password, bio } = req.body;
 
@@ -34,10 +35,12 @@ export const signup = async (req, res) => {
       message: "Account created successfully",
     });
   } catch (error) {
+    console.log(error);
     res.json({ success: false, message: error.message });
   }
 };
 
+// ================= LOGIN =================
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -49,7 +52,7 @@ export const login = async (req, res) => {
 
     const isPasswordCorrect = await bcrypt.compare(
       password,
-      userData.password,
+      userData.password
     );
 
     if (!isPasswordCorrect) {
@@ -65,10 +68,12 @@ export const login = async (req, res) => {
       message: "Login successful",
     });
   } catch (error) {
+    console.log(error);
     res.json({ success: false, message: error.message });
   }
 };
 
+// ================= UPDATE PROFILE =================
 export const updateProfile = async (req, res) => {
   try {
     const { profilePic, bio, fullName } = req.body;
@@ -76,27 +81,42 @@ export const updateProfile = async (req, res) => {
 
     let updatedUser;
 
+    // 👉 without image
     if (!profilePic) {
       updatedUser = await User.findByIdAndUpdate(
         userId,
         { bio, fullName },
-        { new: true },
+        { new: true }
       );
-    } else {
-      const upload = await cloudinary.uploader.upload(profilePic);
+    } 
+    // 👉 with image
+    else {
+      console.log("Uploading image...");
+
+      const upload = await cloudinary.uploader.upload(profilePic, {
+        resource_type: "image",
+      });
+
       updatedUser = await User.findByIdAndUpdate(
         userId,
-        { profilePic: upload.secure_url, bio, fullName },
-        { new: true },
+        {
+          profilePic: upload.secure_url,
+          bio,
+          fullName,
+        },
+        { new: true }
       );
     }
 
     res.json({ success: true, user: updatedUser });
+
   } catch (error) {
+    console.log("UPLOAD ERROR:", error);
     res.json({ success: false, message: error.message });
   }
 };
 
+// ================= CHECK AUTH =================
 export const checkAuth = async (req, res) => {
   res.json({ success: true, user: req.user });
 };
