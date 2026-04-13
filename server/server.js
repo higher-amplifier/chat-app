@@ -44,9 +44,11 @@ io.on("connection", socket => {
 });
 
 // middleware
-app.use(express.json({ limit: "4mb" }));
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: [
+    "http://localhost:5173",
+    "https://chat-app-nu-sandy.vercel.app"
+  ],
   credentials: true
 }));
 
