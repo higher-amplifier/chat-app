@@ -35,7 +35,7 @@ const Sidebar = () => {
       }`}
     >
       {/* ================= HEADER ================= */}
-      <div className="pb-5 flex-shrink-0 sticky top-0 z-10 bg-[#8185B2]/10">
+      <div className="pb-5 flex-shrink-0">
         <div className="flex justify-between items-center">
           <img src={assets.logo} alt="logo" className="max-w-40" />
 
@@ -49,15 +49,12 @@ const Sidebar = () => {
             <div className="absolute top-full right-0 z-20 w-32 p-5 rounded-md bg-[#282142] border border-gray-600 text-gray-100 hidden group-hover:block">
               <p
                 onClick={() => navigate("/profile")}
-                className="cursor-pointer text-sm hover:text-violet-300"
+                className="cursor-pointer text-sm"
               >
                 Edit Profile
               </p>
               <hr className="my-2 border-t border-gray-500" />
-              <p
-                onClick={logout}
-                className="cursor-pointer text-sm hover:text-red-400"
-              >
+              <p onClick={logout} className="cursor-pointer text-sm">
                 Logout
               </p>
             </div>
@@ -77,11 +74,11 @@ const Sidebar = () => {
         </div>
       </div>
 
-      {/* ================= USER LIST ================= */}
-      <div className="flex-1 overflow-y-auto pr-1 min-h-0">
-        {filteredUsers.map((user) => (
+      {/* ================= USER LIST (SCROLL ONLY HERE) ================= */}
+      <div className="flex-1 overflow-y-auto pr-1">
+        {filteredUsers.map((user, index) => (
           <div
-            key={user._id}
+            key={index}
             onClick={() => {
               setSelectedUser(user);
               setUnseenMessages((prev) => ({
@@ -89,7 +86,7 @@ const Sidebar = () => {
                 [user._id]: 0,
               }));
             }}
-            className={`relative flex items-center gap-3 p-2 pl-4 rounded cursor-pointer text-sm transition-all duration-200 hover:bg-[#282142]/40 ${
+            className={`relative flex items-center gap-3 p-2 pl-4 rounded cursor-pointer text-sm hover:bg-[#282142]/40 ${
               selectedUser?._id === user._id ? "bg-[#282142]/50" : ""
             }`}
           >
@@ -101,8 +98,7 @@ const Sidebar = () => {
 
             <div className="flex flex-col leading-5">
               <p className="font-medium">{user.fullName}</p>
-
-              {onlineUsers?.includes(user._id) ? (
+              {onlineUsers.includes(user._id) ? (
                 <span className="text-green-400 text-xs">Online</span>
               ) : (
                 <span className="text-neutral-400 text-xs">Offline</span>
@@ -110,7 +106,7 @@ const Sidebar = () => {
             </div>
 
             {unseenMessages[user._id] > 0 && (
-              <p className="absolute top-3 right-3 text-xs h-5 w-5 flex justify-center items-center rounded-full bg-violet-500/80">
+              <p className="absolute top-3 right-3 text-xs h-5 w-5 flex justify-center items-center rounded-full bg-violet-500/70">
                 {unseenMessages[user._id]}
               </p>
             )}
