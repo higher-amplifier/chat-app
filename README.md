@@ -135,29 +135,7 @@ The returned Cloudinary URL is stored in MongoDB and served directly to clients.
 
 ---
 
-## 🚀 Running Locally
 
-**Prerequisites:** Node.js, MongoDB Atlas account, Cloudinary account
-
-```bash
-# Clone the repo
-git clone <repo-url>
-cd chat-app
-
-# Server setup
-cd server
-npm install
-# Create .env with: MONGODB_URI, JWT_SECRET, CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET
-npm run server
-
-# Client setup (new terminal)
-cd client
-npm install
-# Create .env with: VITE_BACKEND_URL=http://localhost:5000
-npm run dev
-```
-
----
 
 ## 📌 Key Implementation Decisions
 
